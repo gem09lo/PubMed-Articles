@@ -1,0 +1,10 @@
+pandas
+jupyter
+lxml
+spacy
+pycountry
+rapidfuzz
+pylint
+boto3
+python-dotenv
+pandarallel
