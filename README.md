@@ -34,43 +34,43 @@ The goal of this pipeline is to automate what was previously a time-consuming ma
 
 ## 📁 Project Structure
 
-pubmed-articles/
-├── README.md
-├── requirements.txt
-├── .gitignore
-│
-├── pipeline/ # Core ETL logic (extract, transform, load, notify)
-│ ├── extract.py
-│ ├── transform.py
-│ ├── load.py
-│ ├── etl.py
-│ ├── trigger.py
-│ └── dockerfile
-│
-├── raw_data/ # Raw XML files and institutional reference data
-│ ├── c14-gem-lo-pubmed.xml # Sampled dataset
-│ ├── pubmed_result_sjogren.xml # Full dataset
-│ ├── pubmed_result_start.xml # Initial raw file (used in trigger.py)
-│ ├── institutes.csv # GRID institution list
-│ ├── aliases.csv # [Optional] GRID alias data
-│ ├── addresses.csv # [Optional] GRID address data
-│
-├── cleaned_data/ # Output CSVs from the transform stage
-│ ├── pubmed_output.csv # Processed sample output
-│ ├── pubmed_output2.csv # Full processed dataset
-│ ├── matched_sample.csv
-│ └── unmatched_sample.csv
-│
-├── data_analysis/ # Jupyter notebooks for exploration and testing
-│ ├── pubmed_result.ipynb # Full dataset processing
-│ └── pubmed_test.ipynb # Small dataset for test/debugging
-│
-├── terraform/ # AWS Infrastructure-as-Code
-│ ├── main.tf
-│ ├── variables.tf
-│ ├── terraform.tfvars (gitignored)
-│ └── README.md # Setup and deployment instructions
+[pipeline]
+- extract.py: Extracts data from raw XML and institutional files.
+- transform.py: Cleans and processes extracted data.
+- load.py: Loads cleaned data into target storage (e.g., CSV).
+- etl.py: Orchestrates the full ETL process.
+- trigger.py: Entry point for triggering ETL pipeline.
+- dockerfile: Docker configuration for running the pipeline.
 
+[raw_data]
+- c14-gem-lo-pubmed.xml: Sampled XML dataset for testing.
+- pubmed_result_sjogren.xml: Full XML dataset from PubMed.
+
+Standardised Global Research Identifier database (GRID) datasets ('Source of Truth'):
+- institutes.csv: Reference list of institutions from GRID.
+- aliases.csv: (Optional) aliases from GRID data.
+- addresses.csv: (Optional) institutional address data.
+
+[cleaned_data]
+- pubmed_output.csv: Cleaned sample output.
+- pubmed_output2.csv: Cleaned full dataset.
+- matched_sample.csv: Rows successfully matched to institutions.
+- unmatched_sample.csv: Unmatched records for manual review.
+
+[data_analysis]
+- pubmed_result.ipynb: Jupyter notebook processing the full dataset.
+- pubmed_test.ipynb: Debugging and test notebook for small dataset.
+
+[terraform]
+- main.tf: AWS infrastructure configuration.
+- variables.tf: Input variables for Terraform.
+- terraform.tfvars: Private configuration (gitignored).
+- README.md: Instructions for deploying infrastructure.
+
+Root Files
+- README.md: Project overview, setup, and usage instructions.
+- requirements.txt: Python dependencies.
+- .gitignore: Specifies files/folders to exclude from Git.
 
 ---
 
@@ -126,7 +126,7 @@ This project supports automatic deployment to AWS ECS via Terraform. You can:
 - Receive email notifications on pipeline success/failure
 
 For full setup instructions, see:
-➡️ terraform/README.md
+➡️ [terraform/README.md]
 
 
 ### 📓 Notebooks
