@@ -32,6 +32,20 @@ The goal of this pipeline is to automate what was previously a time-consuming ma
 
 ---
 
+### ⚙️ Technologies Used
+**Tool / Service**
+- `Python`	:ETL pipeline implementation
+- `spaCy`	:Named Entity Recognition (NER)
+- `RapidFuzz`	:String similarity matching
+- `pandarallel`	:Multiprocessing support for large DataFrames
+- `AWS S3`	:Input/output data storage
+- `AWS ECS Fargate`	:Serverless task execution
+- `AWS SES`	:Email notifications
+- `Terraform`	:Infrastructure provisioning
+- `Jupyter Notebooks`	:Development and data validation
+
+---
+
 ## 📁 Project Structure
 
 [pipeline]
@@ -73,18 +87,6 @@ Root Files
 - .gitignore: Specifies files/folders to exclude from Git.
 
 ---
-
-### ⚙️ Technologies Used
-**Tool / Service	Role**
-`Python`	:ETL pipeline implementation
-`spaCy`	:Named Entity Recognition (NER)
-`RapidFuzz`	:String similarity matching
-`pandarallel`	:Multiprocessing support for large DataFrames
-`AWS S3`	:Input/output data storage
-`AWS ECS Fargate`	:Serverless task execution
-`AWS SES`	:Email notifications
-`Terraform`	:Infrastructure provisioning
-`Jupyter Notebooks`	:Development and data validation
 
 ## 🔧 Setup Instructions
 
