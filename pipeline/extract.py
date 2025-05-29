@@ -1,4 +1,8 @@
-"""Extracts and downloads Pubmed XML files from S3 bucket"""
+"""ETL Extract Stage:
+Connects to an AWS S3 bucket, downloads relevant PubMed XML files based on a prefix and file extension,
+and saves them locally to the raw_data/ directory for further processing.
+"""
+import os
 from os import environ
 from boto3 import client
 from dotenv import load_dotenv
@@ -21,10 +25,9 @@ def upload_initial_xml(s3, bucket_name, file_name):
 
 
 def download_pubmed_data_files(s3, bucket_name, file_prefix, file_extension):
-    """Downloads relevant files from S3 to a data/folder."""
+    """Downloads relevant files from S3 to raw_data folder."""
 
     bucket = s3.list_objects(Bucket=bucket_name)
-
     contents = bucket.get("Contents", [])
     files_needed = []
 
@@ -35,9 +38,9 @@ def download_pubmed_data_files(s3, bucket_name, file_prefix, file_extension):
 
     if files_needed:
         for file in files_needed:
-            s3.download_file(bucket_name,
-                             file, file)
-            print(f"{file} downloaded successfully")
+            local_path = os.path.join("../raw_data", os.path.basename(file))
+            s3.download_file(bucket_name, file, local_path)
+            print(f"{file} downloaded successfully to {local_path}")
     else:
         print("No data was uploaded")
 
@@ -49,7 +52,7 @@ def main_extract():
 
     client = connect_to_s3()
 
-    # upload_initial_xml(client, bucket, "challenge-1/pubmed_result_start.xml")
+    # upload_initial_xml(client, bucket, "../raw_data/c14-gem-lo-pubmed.xml")
 
     download_pubmed_data_files(
         client, bucket, "c14-gem-lo", ".xml")

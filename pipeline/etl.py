@@ -52,7 +52,7 @@ def run_etl_pipeline():
     sender_email = ENV["SENDER_EMAIL"]
     recipient_email = ENV["RECIPIENT_EMAIL"]
 
-    # verify the email identity initially
+    # Initial step: Verify the email identity by uncommenting line below:
     # verify_email_identity(sender_email)
 
     try:

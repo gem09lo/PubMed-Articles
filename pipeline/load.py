@@ -1,4 +1,4 @@
-"""Uploads the processed data (csv file) to an s3 bucket"""
+"""Uploads the processed data (csv file) to an s3 bucket."""
 from os import environ
 from boto3 import client
 from dotenv import load_dotenv
@@ -49,7 +49,8 @@ def main_load():
 
     client = connect_to_s3()
 
-    upload_csv_file(client, bucket, "pubmed_output.csv")
+    # Full dataset use "../cleaned_data/pubmed_output2.csv"
+    upload_csv_file(client, bucket, "../cleaned_data/pubmed_output.csv")
 
     # download_csv_file(client, bucket, "c14-gem", ".csv")
 

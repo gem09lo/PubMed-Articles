@@ -1,6 +1,5 @@
 # pylint: disable=R1705
-# Fixed but still showed up on github workflows
-# # pylint: disable=W0612
+# pylint: disable=W0612
 """Process PubMed XML file to extract article metadata, author information, and create a structured DataFrame for analysis."""
 import re
 import pandas as pd
@@ -16,7 +15,7 @@ pandarallel.initialize(progress_bar=True)
 cache = {}
 nlp = spacy.load("en_core_web_sm")
 
-grid_df = pd.read_csv("institutes.csv")
+grid_df = pd.read_csv("../raw_data/institutes.csv")
 grid_map = grid_df.set_index('name').to_dict()['grid_id']
 
 # Functions for parsing article metadata and extracting information
@@ -106,7 +105,7 @@ def extract_country(gpe_entities: set[str]) -> str:
 # Function to match institutions to GRID dataset
 
 
-def match_org_to_grid(org_entities: str) -> tuple[str, str]:
+def match_org_to_grid(org_entities: set[str]) -> tuple[str, str]:
     """Matches the org_entities to GRID dataset institutions with RapidFuzz"""
     best_match = None
     best_match_id = None
@@ -142,7 +141,7 @@ def match_org_to_grid_caching(org_entities: set[str]) -> tuple[str, str]:
         cache[org] = (None, None)
     return (None, None)
 
-# Above and beyond - top keywords
+# Above and beyond - Finds the top keywords
 
 
 def top_keywords_by_country(pubmed_df: pd.DataFrame) -> None:
@@ -198,10 +197,11 @@ def extract_samples(pubmed_df: pd.DataFrame):
         min(20, total_records - matched_records), random_state=42
     )
 
-    matched_sample.to_csv("matched_sample.csv", index=False)
-    unmatched_sample.to_csv("unmatched_sample.csv", index=False)
+    matched_sample.to_csv("../cleaned_data/matched_sample.csv", index=False)
+    unmatched_sample.to_csv(
+        "../cleaned_data/unmatched_sample.csv", index=False)
 
-# main processing
+# Main processing
 
 
 def process_pubmed_xml(file_path: str) -> pd.DataFrame:
@@ -266,8 +266,6 @@ def insert_affiliation_data(pubmed_df: pd.DataFrame, output_file: str) -> pd.Dat
 
     pubmed_df.drop(columns=["Institution name", "nlp"], inplace=True)
 
-    # FULL DATA
-    # pubmed_df.to_csv("pubmed_output2.csv", index=False)
     pubmed_df.to_csv(output_file, index=False)
     print(f"{output_file} saved successfully")
 
@@ -276,12 +274,13 @@ def insert_affiliation_data(pubmed_df: pd.DataFrame, output_file: str) -> pd.Dat
 
 def main_transform():
     """Processes the pubmed xml data and creates a pubmed dataframe with cleaned data"""
-    pubmed_raw_file = "c14-gem-lo-pubmed.xml"
+    pubmed_raw_file = "../raw_data/c14-gem-lo-pubmed.xml"
     pubmed_df = process_pubmed_xml(pubmed_raw_file)
-    processed_csv_file = "pubmed_output.csv"
+
+    processed_csv_file = "../cleaned_data/pubmed_output.csv"
     pubmed_df = insert_affiliation_data(pubmed_df, processed_csv_file)
 
-    # ABOVE AND BEYOND
+    # Additional task: Uncomment the line below to get the top frequent keywords:
     # top_keywords_by_country(pubmed_df)
 
 
@@ -295,6 +294,6 @@ if __name__ == "__main__":
 # Percentage of matched records: 40.86%
 
 # pandas multiprocessing
-# to use full file change:
-# pubmed_raw_file = ./challenge-1/pubmed_result_sjogren.xml"
-# processed_csv_file = "pubmed_output2.csv"
+# To use the full dataset make these changes in main_transform():
+# pubmed_raw_file = "../raw_data/pubmed_result_sjogren.xml"
+# processed_csv_file = "../cleaned_data/pubmed_output2.csv"
